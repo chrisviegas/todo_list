@@ -10,7 +10,7 @@ from src.fastapi_zero.schemas import (
     UserSchema,
 )
 
-app = FastAPI(title="You API name here")
+app = FastAPI(title="Your API name here")
 
 database = []
 
