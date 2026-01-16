@@ -16,8 +16,6 @@ from src.fastapi_zero.schemas import (
 
 app = FastAPI(title="Your API name here")
 
-database = []
-
 
 @app.get("/", status_code=HTTPStatus.OK, response_model=Message)
 def read_root():
