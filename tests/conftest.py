@@ -10,6 +10,7 @@ from sqlalchemy.pool import StaticPool
 from src.fastapi_zero.app import app
 from src.fastapi_zero.database import get_session
 from src.fastapi_zero.models import User, table_registry
+from src.fastapi_zero.security import get_password_hash
 
 
 @pytest.fixture
@@ -61,9 +62,27 @@ def mock_db_time():
 
 @pytest.fixture
 def user(session: Session):
-    user = User(name="Mock", email="mock@example.com", password="mockmock")
+    password = "mockmock"
+    user = User(
+        name="Mock",
+        email="mock@example.com",
+        password=get_password_hash("mockmock"),
+    )
     session.add(user)
     session.commit()
     session.refresh(user)
 
+    # Add a attribute to the user object in runtime
+    user.clean_password = password  # pyright: ignore[reportAttributeAccessIssue]
+
     return user
+
+
+@pytest.fixture
+def token(client: TestClient, user: User) -> str:
+    response = client.post(
+        "/login",
+        data={"username": user.email, "password": user.clean_password},  # pyright: ignore[reportAttributeAccessIssue]
+    )
+
+    return response.json()["access_token"]
