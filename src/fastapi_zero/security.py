@@ -11,14 +11,11 @@ from sqlalchemy.orm import Session
 
 from src.fastapi_zero.database import get_session
 from src.fastapi_zero.models import User
-
-SECRET_KEY = "b346c5b6a8d8f62b45c81d5d2dd5d8899400183dff90013b9641074081377c1b"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+from src.fastapi_zero.settings import Settings
 
 pwd_context = PasswordHash.recommended()
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+settings = Settings()  # pyright: ignore[reportCallIssue]
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 def get_password_hash(password: str) -> str:
@@ -36,12 +33,14 @@ def create_access_token(data: dict) -> str:
     to_encode = data.copy()
 
     expire = datetime.now(tz=ZoneInfo("UTC")) + timedelta(
-        minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
     )
 
     to_encode.update({"exp": expire})
 
-    encode_jwt = encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    encode_jwt = encode(
+        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
+    )
 
     return encode_jwt
 
@@ -57,7 +56,9 @@ def get_current_user(
     )
 
     try:
-        payload = decode(token, SECRET_KEY, algorithms=ALGORITHM)
+        payload = decode(
+            token, settings.SECRET_KEY, algorithms=settings.ALGORITHM
+        )
         subject_email = payload["sub"]
         if not subject_email:
             raise credentials_exception

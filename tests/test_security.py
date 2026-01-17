@@ -3,18 +3,15 @@ from http import HTTPStatus
 from fastapi.testclient import TestClient
 from jwt import decode
 
-from src.fastapi_zero.security import (
-    ALGORITHM,
-    SECRET_KEY,
-    create_access_token,
-)
+from src.fastapi_zero.security import create_access_token
+from src.fastapi_zero.settings import Settings
 
 
-def test_jwt():
+def test_jwt(settings: Settings):
     data = {"test": "test"}
     token = create_access_token(data)
 
-    decoded = decode(token, SECRET_KEY, algorithms=ALGORITHM)
+    decoded = decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
 
     assert decoded["test"] == data["test"]
     assert "exp" in decoded
