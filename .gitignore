@@ -177,7 +177,8 @@ poetry.toml
 pyrightconfig.json
 
 # IDE config folder
-*./.zed
+.zed/
+
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 
