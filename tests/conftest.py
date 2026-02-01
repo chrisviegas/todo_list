@@ -3,6 +3,8 @@ from datetime import datetime
 
 import pytest
 import pytest_asyncio
+from factory.base import Factory
+from factory.faker import Faker
 from fastapi.testclient import TestClient
 from sqlalchemy import event
 from sqlalchemy.ext.asyncio.engine import create_async_engine
@@ -69,11 +71,21 @@ def mock_db_time():
 @pytest_asyncio.fixture
 async def user(session: AsyncSession):
     password = "mockmock"
-    user = User(
-        name="Mock",
-        email="mock@example.com",
-        password=get_password_hash("mockmock"),
-    )
+    user = UserFactory(password=get_password_hash(password))
+    session.add(user)
+    await session.commit()
+    await session.refresh(user)
+
+    # Add a attribute to the user object in runtime
+    user.clean_password = password  # pyright: ignore[reportAttributeAccessIssue]
+
+    return user
+
+
+@pytest_asyncio.fixture
+async def other_user(session: AsyncSession):
+    password = "mockmock"
+    user = UserFactory(password=get_password_hash(password))
     session.add(user)
     await session.commit()
     await session.refresh(user)
@@ -97,3 +109,12 @@ def token(client: TestClient, user: User) -> str:
 @pytest.fixture
 def settings():
     return Settings()  # pyright: ignore[reportCallIssue]
+
+
+class UserFactory(Factory):
+    class Meta:  # pyright: ignore
+        model = User
+
+    name = Faker("name", locale="pt_BR")
+    email = Faker("email", locale="pt_BR")
+    password = Faker("password")

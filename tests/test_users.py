@@ -29,7 +29,7 @@ def test_exception_create_user(client: TestClient, user: User):
         "/users/",
         json={
             "name": "Christian",
-            "email": "mock@example.com",
+            "email": user.email,
             "password": "12345678",
         },
     )
@@ -51,6 +51,17 @@ def test_get_all_users(client: TestClient, user: User, token):
     assert response.json() == {"users": [user_schema]}
 
 
+def test_get_user(client: TestClient, user: User):
+    response = client.get("/users/1")
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        "id": 1,
+        "name": user.name,
+        "email": user.email,
+    }
+
+
 def test_update_user(client: TestClient, user: User, token):
     response = client.put(
         "/users/1",
@@ -70,9 +81,9 @@ def test_update_user(client: TestClient, user: User, token):
     }
 
 
-def test_exeption_update_user(client: TestClient, token):
+def test_exeption_update_user(client: TestClient, other_user: User, token):
     response = client.put(
-        "/users/2",
+        f"/users/{other_user.id}",
         headers={"Authorization": f"Bearer {token}"},
         json={
             "name": "Gabriel",
@@ -86,22 +97,15 @@ def test_exeption_update_user(client: TestClient, token):
     assert response.json() == {"detail": "Not enough permissions."}
 
 
-def test_integrity_update_user(client: TestClient, user: User, token):
-    client.post(
-        "/users",
-        json={
-            "name": "Gabriel",
-            "email": "gabriel@email.com",
-            "password": "123",
-        },
-    )
-
+def test_integrity_update_user(
+    client: TestClient, user: User, token, other_user: User
+):
     response = client.put(
         f"users/{user.id}",
         headers={"Authorization": f"Bearer {token}"},
         json={
-            "name": "Mock Mockado",
-            "email": "gabriel@email.com",
+            "name": other_user.name,
+            "email": other_user.email,
             "password": "123456",
         },
     )
@@ -110,17 +114,6 @@ def test_integrity_update_user(client: TestClient, user: User, token):
     assert response.status_code == HTTPStatus.CONFLICT
     assert response.json() == {
         "detail": "Already exists a user with this email."
-    }
-
-
-def test_get_user(client: TestClient, user: User):
-    response = client.get("/users/1")
-
-    assert response.status_code == HTTPStatus.OK
-    assert response.json() == {
-        "id": 1,
-        "name": "Mock",
-        "email": "mock@example.com",
     }
 
 
@@ -141,9 +134,9 @@ def test_delete_user(client: TestClient, user: User, token):
     assert response.json() == {"message": "User deleted."}
 
 
-def test_exeption_delete_user(client: TestClient, token):
+def test_exeption_delete_user(client: TestClient, other_user: User, token):
     response = client.delete(
-        "/users/2", headers={"Authorization": f"Bearer {token}"}
+        f"/users/{other_user.id}", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.is_error
