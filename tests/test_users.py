@@ -3,7 +3,7 @@ from http import HTTPStatus
 from fastapi.testclient import TestClient
 
 from src.fastapi_zero.models import User
-from src.fastapi_zero.schemas import UserPublic
+from src.fastapi_zero.schemas import Token, UserPublic
 
 
 def test_create_user(client: TestClient):
@@ -134,7 +134,9 @@ def test_delete_user(client: TestClient, user: User, token):
     assert response.json() == {"message": "User deleted."}
 
 
-def test_exeption_delete_user(client: TestClient, other_user: User, token):
+def test_exeption_delete_user(
+    client: TestClient, other_user: User, token: Token
+):
     response = client.delete(
         f"/users/{other_user.id}", headers={"Authorization": f"Bearer {token}"}
     )

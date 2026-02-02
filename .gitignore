@@ -178,6 +178,7 @@ pyrightconfig.json
 
 # IDE config folder
 .zed/
+.vscode/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/python
