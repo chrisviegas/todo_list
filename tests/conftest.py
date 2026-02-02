@@ -10,7 +10,7 @@ from sqlalchemy import event
 from sqlalchemy.ext.asyncio.engine import create_async_engine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import Session
-from sqlalchemy.pool import StaticPool
+from testcontainers.postgres import PostgresContainer
 
 from src.todo_list.app import app
 from src.todo_list.database import get_session
@@ -31,13 +31,14 @@ def client(session: Session):
     app.dependency_overrides.clear()
 
 
+@pytest.fixture(scope="session")
+def engine():
+    with PostgresContainer("postgres:17", driver="psycopg") as pg:
+        yield create_async_engine(pg.get_connection_url())
+
+
 @pytest_asyncio.fixture
-async def session():
-    engine = create_async_engine(
-        "sqlite+aiosqlite:///:memory:",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
-    )
+async def session(engine):
     async with engine.begin() as conn:
         await conn.run_sync(table_registry.metadata.create_all)
 

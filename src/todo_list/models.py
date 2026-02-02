@@ -1,6 +1,7 @@
 from datetime import datetime
 from enum import Enum
 
+from sqlalchemy import Enum as SAEnum
 from sqlalchemy import ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
 
@@ -46,7 +47,9 @@ class Todo:
     )
     title: Mapped[str]
     description: Mapped[str]
-    state: Mapped[TodoState]
+    state: Mapped[TodoState] = mapped_column(
+        SAEnum(TodoState, native_enum=False)
+    )
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now()
     )
