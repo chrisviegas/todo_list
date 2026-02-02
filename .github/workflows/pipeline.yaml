@@ -3,19 +3,22 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
-      - name: Copy repository files
-        uses: actions/checkout@v5
+      # - name: Copy repository files
+      #   uses: actions/checkout@v5
  
-      - name: Install Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.14'
+      # - name: Install Python
+      #   uses: actions/setup-python@v6
+      #   with:
+      #     python-version: '3.13'
       
-      - name: Install Poetry
-        run: pipx install poetry
+      # - name: Install Poetry
+      #   run: pipx install poetry
+
+      - name: Disable Poetry Keyring
+        run: poetry config keyring.enabled false
 
       - name: Install dependencies
         run: poetry install
@@ -24,7 +27,8 @@ jobs:
         run: poetry run task test
 
     env:
-      DATABASE_URL= ${{ secrets.DATABASE_URL }}
-      SECRET_KEY= ${{ secrets.SECRET_KEY }}
-      ALGORITHM= ${{ secrets.ALGORITHM }}
-      ACCESS_TOKEN_EXPIRE_MINUTES= ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+      PYTHON_KEYRING_BACKEND: keyring.backends.null.Keyring
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ALGORITHM: ${{ secrets.ALGORITHM }}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
