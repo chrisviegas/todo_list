@@ -6,16 +6,16 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-from src.fastapi_zero.database import get_session
-from src.fastapi_zero.models import User
-from src.fastapi_zero.schemas import (
+from src.todo_list.database import get_session
+from src.todo_list.models import User
+from src.todo_list.schemas import (
     FilterPage,
     Message,
     UserList,
     UserPublic,
     UserSchema,
 )
-from src.fastapi_zero.security import (
+from src.todo_list.security import (
     get_current_user,
     get_password_hash,
 )

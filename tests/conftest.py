@@ -12,11 +12,11 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
-from src.fastapi_zero.app import app
-from src.fastapi_zero.database import get_session
-from src.fastapi_zero.models import User, table_registry
-from src.fastapi_zero.security import get_password_hash
-from src.fastapi_zero.settings import Settings
+from src.todo_list.app import app
+from src.todo_list.database import get_session
+from src.todo_list.models import User, table_registry
+from src.todo_list.security import get_password_hash
+from src.todo_list.settings import Settings
 
 
 @pytest.fixture

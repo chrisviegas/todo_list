@@ -5,12 +5,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.fastapi_zero.database import get_session
-from src.fastapi_zero.models import (
+from src.todo_list.database import get_session
+from src.todo_list.models import (
     Todo,
     User,
 )
-from src.fastapi_zero.schemas import (
+from src.todo_list.schemas import (
     FilterTodo,
     Message,
     TodoList,
@@ -18,7 +18,7 @@ from src.fastapi_zero.schemas import (
     TodoSchema,
     TodoUpdate,
 )
-from src.fastapi_zero.security import get_current_user
+from src.todo_list.security import get_current_user
 
 router = APIRouter(prefix="/todos", tags=["todos"])
 

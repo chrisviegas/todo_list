@@ -2,8 +2,8 @@ from http import HTTPStatus
 
 from fastapi.testclient import TestClient
 
-from src.fastapi_zero.models import User
-from src.fastapi_zero.schemas import Token, UserPublic
+from src.todo_list.models import User
+from src.todo_list.schemas import Token, UserPublic
 
 
 def test_create_user(client: TestClient):

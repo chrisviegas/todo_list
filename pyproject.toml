@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "fastapi_zero", from = "src"}]
+packages = [{include = "todo_list", from = "src"}]
 
 [tool.ruff]
 line-length = 79
@@ -41,9 +41,9 @@ asyncio_default_fixture_loop_scope = "function"
 lint = 'ruff check'
 pre_format = 'ruff check --fix'
 format = 'ruff format'
-run = 'fastapi dev src/fastapi_zero/app.py'
+run = 'fastapi dev src/todo_list/app.py'
 pre_test = 'task lint'
-test = 'pytest -s -x --cov=src/fastapi_zero -vv'
+test = 'pytest -s -x --cov=src/todo_list -vv'
 post_test = 'coverage html'
 
 [tool.coverage.run]

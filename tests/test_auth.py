@@ -3,8 +3,8 @@ from http import HTTPStatus
 from fastapi.testclient import TestClient
 from freezegun import freeze_time
 
-from fastapi_zero.schemas import Token
-from src.fastapi_zero.models import User
+from src.todo_list.models import User
+from todo_list.schemas import Token
 
 
 def test_login(client: TestClient, user: User):

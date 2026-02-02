@@ -7,8 +7,8 @@ from sqlalchemy import pool
 from alembic import context
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-from src.fastapi_zero.models import table_registry
-from src.fastapi_zero.settings import Settings
+from src.todo_list.models import table_registry
+from src.todo_list.settings import Settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -9,9 +9,9 @@ from pwdlib import PasswordHash
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.fastapi_zero.database import get_session
-from src.fastapi_zero.models import User
-from src.fastapi_zero.settings import Settings
+from src.todo_list.database import get_session
+from src.todo_list.models import User
+from src.todo_list.settings import Settings
 
 pwd_context = PasswordHash.recommended()
 settings = Settings()  # pyright: ignore[reportCallIssue]

@@ -3,8 +3,8 @@ from http import HTTPStatus
 from fastapi.testclient import TestClient
 from jwt import decode
 
-from src.fastapi_zero.security import create_access_token
-from src.fastapi_zero.settings import Settings
+from src.todo_list.security import create_access_token
+from src.todo_list.settings import Settings
 
 
 def test_jwt(settings: Settings):

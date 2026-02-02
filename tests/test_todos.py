@@ -8,8 +8,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.fastapi_zero.models import Todo, TodoState, User
-from src.fastapi_zero.schemas import Token
+from src.todo_list.models import Todo, TodoState, User
+from src.todo_list.schemas import Token
 
 
 class TodoFactory(Factory):
