@@ -6,7 +6,7 @@ authors = [
     {name = "Christian Viegas",email = "chris.gabriel346@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13,<4.0"
+requires-python = ">=3.11"
 dependencies = [
     "fastapi[standard] (>=0.128.0,<0.129.0)",
     "sqlalchemy[asyncio] (>=2.0.45,<3.0.0)",

@@ -36,13 +36,14 @@ def test_exception_login(client: TestClient, user: User):
     assert response.json() == {"detail": "Incorret email or password"}
 
 
+# Nesse caso, o tempo de expiração do token é de 30 min
 def test_token_expired_after_time(client: TestClient, user: User):
     with freeze_time("2023-07-14 12:00:00"):
         response = client.post(
             "auth/login",
             data={
                 "username": user.email,
-                "password": user.clean_password,  # pyright: ignore[reportAttributeAccessIssue]
+                "password": user.clean_password,
             },
         )
         assert response.status_code == HTTPStatus.OK
@@ -53,9 +54,8 @@ def test_token_expired_after_time(client: TestClient, user: User):
             f"/users/{user.id}",
             headers={"Authorization": f"Bearer {token}"},
             json={
-                "username": "wrongwrong",
-                "email": "wrong@wrong.com",
-                "password": "wrong",
+                "username": user.email,
+                "password": user.clean_password,
             },
         )
         assert response.status_code == HTTPStatus.UNAUTHORIZED
